@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../AutoTradeSystem/AutoTradeSystem/AutoTradeSystem/AutoTradeSystem.csproj" />
+  <Project Path="../PricingSystem/PricingSystem/PricingSystem/PricingSystem.csproj" />
+  <Project Path="../TradeActionSystem/TradeActionSystem/TradeActionSystem.csproj" />
+  <Project Path="Aspire-AutoTradeSystem/Aspire-AutoTradeSystem.csproj" />
+</Solution>
