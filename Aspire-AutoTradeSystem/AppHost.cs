@@ -1,7 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var pricingSystem = builder.AddProject<Projects.PricingSystem>("PricingSystem")
-                             .WithHttpHealthCheck("/api/price/GetAllPrices");
+    .WithHttpEndpoint(name: "health-ep")
+    .WithHttpHealthCheck(path: "/api/price/GetAllPrices", endpointName: "health-ep");
 
 builder.AddProject<Projects.AutoTradeSystem>("AutoTradeSystem")
                              .WithReference(pricingSystem)
