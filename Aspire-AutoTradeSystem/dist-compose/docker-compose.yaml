@@ -64,10 +64,17 @@ services:
       services__pricingsystem__https__0: "https://pricingsystem:8080"
       services__pricingsystem__grpc__0: "https://pricingsystem:7001"
       PricingSystemBaseURL: "https://pricingsystem:7001"
+      ConnectionHostName: "${ConnectionHostName}"
+      ConnectionStrings__my-rabbit: "${ConnectionStrings__my-rabbit}"
+      ConnectionStrings__my_rabbit: "${ConnectionStrings__my-rabbit}"
+      RabbitMQQueue: "${RabbitMQQueue}"
+      RabbitMQExchange: "${RabbitMQExchange}"
     expose:
       - "${AUTOTRADESYSTEM_PORT}"
     depends_on:
       pricingsystem:
+        condition: "service_started"
+      rabbitmq:
         condition: "service_started"
     networks:
       - "aspire"
