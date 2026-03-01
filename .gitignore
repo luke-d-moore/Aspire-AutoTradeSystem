@@ -6,3 +6,4 @@
 .vs/Aspire-AutoTradeSystem.slnx/solutionOpened
 *.bin
 /.vs
+Aspire-AutoTradeSystem/dist-compose/aspnetapp.pfx
