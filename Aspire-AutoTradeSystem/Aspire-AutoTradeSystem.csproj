@@ -12,5 +12,8 @@
 	<ProjectReference Include="..\..\PricingSystem\PricingSystem\PricingSystem\PricingSystem.csproj" />
 	<ProjectReference Include="..\..\TradeActionSystem\TradeActionSystem\TradeActionSystem.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Docker" Version="13.1.2-preview.1.26125.13" />
+  </ItemGroup>
 
 </Project>
