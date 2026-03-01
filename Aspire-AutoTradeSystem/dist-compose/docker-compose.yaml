@@ -11,7 +11,7 @@ services:
     restart: "always"
   rabbitmq:
     image: "rabbitmq:3-management"
-    hostname: "my-rabbit-host" # Required to ensure data persistence matches the node name
+    hostname: "my-rabbit-host"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 5s
@@ -21,17 +21,22 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq # Mount point for RabbitMQ data
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - "aspire"
   pricingsystem:
     image: "${PRICINGSYSTEM_IMAGE}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/price/GetAllPrices"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s 
     environment:
       OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
       OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
       OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
       ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
-      # Give each one a UNIQUE port
       Kestrel__Certificates__Default__Password: "testpassword123456*!"
       Kestrel__Certificates__Default__Path: "/https/aspnetapp.pfx"
       Kestrel__Endpoints__GrpcApi__Url: "https://*:7001"
@@ -78,7 +83,7 @@ services:
       - "${AUTOTRADESYSTEM_PORT}"
     depends_on:
       pricingsystem:
-        condition: "service_started"
+        condition: "service_healthy"
       rabbitmq:
         condition: "service_healthy"
     networks:
@@ -111,7 +116,7 @@ services:
       - "${TRADEACTIONSYSTEM_PORT}"
     depends_on:
       pricingsystem:
-        condition: "service_started"
+        condition: "service_healthy"
       rabbitmq:
         condition: "service_healthy"
     networks:
