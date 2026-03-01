@@ -12,6 +12,11 @@ services:
   rabbitmq:
     image: "rabbitmq:3-management"
     hostname: "my-rabbit-host" # Required to ensure data persistence matches the node name
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -75,7 +80,7 @@ services:
       pricingsystem:
         condition: "service_started"
       rabbitmq:
-        condition: "service_started"
+        condition: "service_healthy"
     networks:
       - "aspire"
   tradeactionsystem:
@@ -108,7 +113,7 @@ services:
       pricingsystem:
         condition: "service_started"
       rabbitmq:
-        condition: "service_started"
+        condition: "service_healthy"
     networks:
       - "aspire"
 networks:
