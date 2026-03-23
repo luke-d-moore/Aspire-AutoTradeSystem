@@ -53,6 +53,8 @@ services:
       - "7250"
       - "8000"
       - "8080"
+    ports:
+      - "7250:7250"
     networks:
       - "aspire"
   autotradesystem:
@@ -79,8 +81,16 @@ services:
       ConnectionStrings__my_rabbit: "${ConnectionStrings__my-rabbit}"
       RabbitMQQueue: "${RabbitMQQueue}"
       RabbitMQExchange: "${RabbitMQExchange}"
+      ASPNETCORE_URLS: "https://+:7158;http://+:8080" 
+      Kestrel__Certificates__Default__Password: "testpassword123456*!"
+      Kestrel__Certificates__Default__Path: "/https/aspnetapp.pfx"
+      Kestrel__Endpoints__HttpsApi__Url: "https://*:7158"
     expose:
       - "${AUTOTRADESYSTEM_PORT}"
+    volumes:
+      - /home/luke/aspnetapp.pfx:/https/aspnetapp.pfx:ro
+    ports:
+      - "7158:7158"
     depends_on:
       pricingsystem:
         condition: "service_healthy"
